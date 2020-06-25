@@ -1,11 +1,24 @@
 import numpy as np
-from scipy.linalg import lu
+from scipy.linalg import lu, solve
 
 
-A = np.array([ [2, 7, 6],
-               [9, 5, 1],
-               [4, 3, 8] ])
+A_3a = np.array([ [2, 2, 5],
+               [1, 1, 5],
+               [3, 2, 5] ])
 
+b_3a = np.array([5, -5, 0]).reshape(3,1)
+
+A_3b = np.array([ [-3, -4, -1],
+               [2, 3, 1],
+               [3, 5, 2] ])
+
+b_3b = np.array([3, 5, 1]).reshape(3,1)
+
+A_3c = np.array([ [1, -1, 0],
+                  [0, 1, -2],
+                  [1, 0, -2] ])
+
+b_3c = np.array([2, 3, 5]).reshape(3,1)
 
 
 def LDU_decomp(A):
@@ -34,14 +47,14 @@ def LDU_decomp(A):
 
     return L_fin, A
 
-L, U = LDU_decomp(A)
+L, U = LDU_decomp(A_3a)
 
 print("PROBLEM 1\n================\nOriginal Matrix:")
-print(A)
+print(A_3a)
 print("L:\n", L)
 #print("D:\n", D)
 print("U:\n", U)
-print("L*D*U:\n", L.dot(U))
+print("L*U:\n", L.dot(U))
 
 A1 = np.array([ [1, -1, 0], [0, 2, -1], [1, 0, -0.5] ])
 A2 = np.array([ [-1, 1, 0, 0], [-1, 0, 1, 0], [0, -4, 1, 0], [0, -1, 0, 1], [0, 0, -2, 1] ])
@@ -51,14 +64,17 @@ def decompA_LDU_SVD(A):
     print("A original:\n", A)
 
     P, L, U = lu(A)
-    #print("\nP:\n", P, "\nL:\n", L, "\nU:\n", U)
+    print("\nP:\n", P, "\nL:\n", L, "\nU:\n", U)
+    print("P inverted:\n", np.linalg.inv(P))
     A_recomp = P.dot(L.dot(U))
 
-    print("A Recomposed (LDU):\n", A_recomp)
+    print("A Recomposed (PLU):\n", A_recomp)
 
     U, S, Vh = np.linalg.svd(A)
 
     S = np.diag(S)
+
+    print("\nU:\n", U, "\nS:\n", S, "\nVh:\n", Vh)
 
     #print("U:\n", U, "\nSigma:\n", S, "\nV_T:\n", Vh)
     A_recomp_SVD = U[:,:len(S[0])].dot(S.dot(Vh))
@@ -75,3 +91,32 @@ print("\n\nPROBLEM 2\n================\n")
 decompA_LDU_SVD(A1)
 decompA_LDU_SVD(A2)
 decompA_LDU_SVD(A3)
+
+decompA_LDU_SVD(A_3a)
+
+
+# I did part A of question 3 on paper
+
+def SVD_leastSquares_solution(A, b):
+     U, S, Vh = np.linalg.svd(A)
+
+     for i in range(len(S)):
+         if abs(S[i]) < 1e-5:
+             S[i] = 0
+         else:
+             S[i] = 1 / S[i]
+
+     S = np.diag(S)
+
+     print("\nU:\n", U, "\nS:\n", S, "\nVh:\n", Vh)
+
+     U_T = np.transpose(U)
+     V = np.transpose(Vh)
+
+     x = V.dot(S.dot(U_T.dot(b)))
+
+     print("X vector (SVD approx):\n", x)
+
+     return x
+
+SVD_leastSquares_solution(A_3c, b_3c)
