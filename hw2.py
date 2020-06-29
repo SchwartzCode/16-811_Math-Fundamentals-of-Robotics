@@ -178,7 +178,7 @@ print("Right x boundary for tan(x) when approaching 11:\t", x_high)
 
 
 print("\n\n\tPROBLEM 4\n========================")
-print("skipping this for now, not sure it's working out")
+print("skipping this for now, will return using pages 20-24 of nonlinear equation roots notes")
 
 
 print("\n\n\tPROBLEM 5\n========================")
