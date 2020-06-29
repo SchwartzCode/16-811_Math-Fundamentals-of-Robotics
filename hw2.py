@@ -131,7 +131,7 @@ for n in n_vals:
 print("\nSo it looks like the interpolation improves with more points to a point (around 10)")
 print("and then starts becoming less accurate with more points. It seems this happens because")
 print("the algorithm starts 'over-fitting' the curve, and you get some crazy, high-order")
-print("stuff going on at the edges of the range you're interpolating. See here for info on this phenomena:")
+print("stuff going on at the edges of the range you're interpolating. See here for info on this phenomenon:")
 print("https://www.johndcook.com/blog/2009/04/01/polynomial-interpolation-errors/\n\n")
 
 print("\n\tPROBLEM 2\n========================")
@@ -149,5 +149,39 @@ print("I believe this is adequate because the answer will always be accurate wit
 print("or less, which means it should be accurate to 6 decimal places.")
 
 print("\n\n\tPROBLEM 3\n========================")
+def newton_method_tan(x_val):
+    val = np.tan(x_val)
+    deriv = 1 / np.cos(x_val)**2
+
+    next_x_val = x_val + (val / deriv)
+
+    return next_x_val
+
+
+x_low = 10.5
+counter = 0
+while counter < 10:
+    x_low = newton_method_tan(x_low)
+    counter += 1
+
+print("Left x boundary for tan(x) when approaching 11:\t\t", x_low)
+
+x_high = 11.5
+counter = 0
+while counter < 10:
+    x_high = newton_method_tan(x_high)
+    counter += 1
+
+print("Right x boundary for tan(x) when approaching 11:\t", x_high)
+
+
+
+
+print("\n\n\tPROBLEM 4\n========================")
+print("skipping this for now, not sure it's working out")
+
+
+print("\n\n\tPROBLEM 5\n========================")
+
 
 print("\n\n")
