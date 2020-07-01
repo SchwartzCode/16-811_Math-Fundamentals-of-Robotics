@@ -120,3 +120,5 @@ def SVD_leastSquares_solution(A, b):
      return x
 
 SVD_leastSquares_solution(A_3c, b_3c)
+
+# try problems 4 and 5 on paper
