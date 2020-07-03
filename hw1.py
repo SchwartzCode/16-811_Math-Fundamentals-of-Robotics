@@ -26,15 +26,30 @@ def LDU_decomp(A):
     i = 0
     max = len(A) - 1
     L_old = 1
+    P = np.identity(len(A))
 
     while (i < max):
         L = np.identity(len(A))
         for j in range(i+1 , len(A)):
-            L[j,i] = - A[j,i] / A[i,i]
-        #print("before:", A, "\n", L, "\n")
+            if A[i,i] == 0:
+                if j == len(A):
+                    print("err")
+                else:
+                    k = j
+                    while k < len(A):
+                        if A[k, k] != 0:
+                            temp = A[i,:].copy()
+                            A[i,:] = A[k,:]
+                            A[k,:] = temp
+
+                            P_tmp = P[i,:].copy()
+                            P[i,:] = P[k,:]
+                            P[k,:] = P_tmp
+                            break
+            else:
+                L[j,i] = - A[j,i] / A[i,i]
         A = L.dot(A)
         L_old = L.dot(L_old)
-        #print(A, "\n\n")
         i += 1
 
     D = np.identity(len(A))
@@ -45,15 +60,18 @@ def LDU_decomp(A):
 
     L_fin = np.linalg.inv(L_old)
 
-    return L_fin, A
+    return P, L_fin, A
 
-L, U = LDU_decomp(A_3a)
+P, L, U = LDU_decomp(A_3a)
 
 print("PROBLEM 1\n================\nOriginal Matrix:")
 print(A_3a)
+print("P:\n", P)
 print("L:\n", L)
 #print("D:\n", D)
 print("U:\n", U)
+print("P*A:\n", P.dot(A_3a))
+
 print("L*U:\n", L.dot(U))
 
 A1 = np.array([ [1, -1, 0], [0, 2, -1], [1, 0, -0.5] ])
