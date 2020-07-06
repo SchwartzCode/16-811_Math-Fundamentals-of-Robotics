@@ -1,6 +1,7 @@
 import numpy as np
 import math as m
 from cmath import sqrt
+import matplotlib.pyplot as plt
 
 def log_func(x):
     result = (np.log(x) / np.log(6)) ** 1.5
@@ -246,20 +247,42 @@ sol_q5 = MullerMethod(np.array([0.5+0.5j, 0.75+0.75j, 0.99+0.99j]), f_q5)
 print(sol_q5)
 
 print("\n\n\tPROBLEM 6\n========================")
-A = np.array([ [1, -9, 26, 0],
+A = np.array([ [1, -9, 26, -24],
                [0, 1, -9, 26],
                [0, 1, 3, -10],
                [0, 0, 1, 3] ])
 aDet = np.linalg.det(A)
-
+print(aDet)
 print("These equations share a root: ", aDet == 0)
 
 print("\n\n\tPROBLEM 7\n========================")
 
-def p(x, y):
-    return 2*x**2 + 2*y**2 - 1
+def p(x):
+    print(x)
+    print(0.5 - x**2)
+    val = abs(np.sqrt(0.5 - x**2))
+    print(val)
+    return [val, -val]
 
 def q(x, y):
     return x**2 + y**2 + 2*x*y - x + y
+
+x_vals7A = np.arange(-np.sqrt(2),np.sqrt(2),1e-4)
+#print(x_vals)
+y_vals7A = p(x_vals7A)
+
+x_vals7B = [0.5, 0, -0.125, 0, 0.375, 1, 2.118]
+y_vals7B = [-2.118, -1, -0.375, 0, 0.125, 0, -0.5]
+
+print(len(y_vals7A), len(y_vals7A[0]))
+print(y_vals7A[1])
+#plt.plot(x_vals7A, y_vals7A[0], color='blue', label='1 = x^2 + y^2')
+#plt.plot(x_vals7A, y_vals7A[1], color='blue')
+plt.plot(x_vals7B, y_vals7B, color='red')
+plt.legend(loc='upper right')
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.title("Problem 7: Finding shared zeros of two bivariate polynomials")
+plt.show()
 
 print("\n\n")
