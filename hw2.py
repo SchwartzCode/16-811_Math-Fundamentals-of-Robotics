@@ -258,10 +258,7 @@ print("These equations share a root: ", aDet == 0)
 print("\n\n\tPROBLEM 7\n========================")
 
 def p(x):
-    print(x)
-    print(0.5 - x**2)
     val = abs(np.sqrt(0.5 - x**2))
-    print(val)
     return [val, -val]
 
 def q(x, y):
@@ -274,11 +271,12 @@ y_vals7A = p(x_vals7A)
 x_vals7B = [0.5, 0, -0.125, 0, 0.375, 1, 2.118]
 y_vals7B = [-2.118, -1, -0.375, 0, 0.125, 0, -0.5]
 
-print(len(y_vals7A), len(y_vals7A[0]))
-print(y_vals7A[1])
-#plt.plot(x_vals7A, y_vals7A[0], color='blue', label='1 = x^2 + y^2')
-#plt.plot(x_vals7A, y_vals7A[1], color='blue')
-plt.plot(x_vals7B, y_vals7B, color='red')
+
+plt.plot(x_vals7A, y_vals7A[0], color='blue', label='0 = x^2 + y^2 - 1')
+plt.plot(x_vals7A, y_vals7A[1], color='blue')
+plt.plot(x_vals7B, y_vals7B, color='red', label='0 = x^2 + y^2 + 2xy - x + y')
+plt.scatter(-0.08405, p(-0.08405)[1], color='purple', label='Intersection Points')
+plt.scatter(0.70209, p(0.70209)[0], color='purple')
 plt.legend(loc='upper right')
 plt.xlabel("X")
 plt.ylabel("Y")
