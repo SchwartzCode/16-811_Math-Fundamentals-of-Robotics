@@ -8,12 +8,13 @@ y1_quadratic = 0.5 + 2*x1/np.pi
 y1_LSE = 0.5 + x1*24/np.pi**3
 
 plt.plot(x1, y1_true, label='Analytical')
-plt.plot(x1, y1_taylor, linestyle = '--', label='Taylor Approximation (3rd Order)')
+#plt.plot(x1, y1_taylor, linestyle = '--', label='Taylor Approximation (3rd Order)')
+
+#plt.plot(x1, y1_quadratic, color='purple', linestyle='--', label='Best Quadratic Approimation (it\'s linear tho)')
+plt.plot(x1, y1_LSE, color='green', linestyle='--', label='Least Squares Approximation')
 #plt.plot(x1, -np.sin(x1), label='Second Deriv')
 #plt.plot(x1, 0.5 + 4 * x1**2 / np.pi**2)
 #plt.plot(x1, 0.3*(x1+1.5)**2 - 0.5)
-plt.plot(x1, y1_quadratic, color='purple', linestyle='--', label='Best Quadratic Approimation (it\'s linear tho)')
-plt.plot(x1, y1_LSE, color='green', linestyle='--', label='Least Squares Approximation')
 plt.legend(loc='upper right')
 plt.show()
 
