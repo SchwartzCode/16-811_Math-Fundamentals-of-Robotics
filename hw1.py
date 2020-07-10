@@ -22,7 +22,7 @@ b_3c = np.array([2, 3, 5]).reshape(3,1)
 
 
 def LDU_decomp(A):
-# This almost definitely doesn't work quite right
+
     i = 0
     max = len(A) - 1
     L_old = 1
