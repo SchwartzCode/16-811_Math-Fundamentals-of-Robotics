@@ -87,7 +87,6 @@ def SVD_leastSquares_solution(A, b):
 p2_coeffs = SVD_leastSquares_solution(A_p2, p2_y)
 p2_est = A_p2.dot(p2_coeffs)
 
-
 plt.plot(p2_x, p2_y, label = 'Original Function')
 plt.plot(p2_x, p2_est, linestyle='--', label='Approximation')
 plt.legend(loc="lower right")
@@ -95,3 +94,7 @@ plt.xlabel("X")
 plt.ylabel("Y")
 plt.title("Problem 2 - Aprroximation Using Basis Functions")
 plt.show()
+
+# Problem 3 was all done on paper (with the assistance of a calculator for the large integral)
+
+# I'll do problem 4 if I have time in August
