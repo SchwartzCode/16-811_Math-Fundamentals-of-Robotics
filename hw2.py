@@ -226,6 +226,7 @@ def MullerMethod(guesses, f, iter = 5000):
             #print("resid: ", res)
 
     print("Muller method didn't work; exceeded max iterations :( ")
+    print("Final closest guess:", guesses[2])
     return guesses[2]
 
 def f_q5(x):
@@ -240,11 +241,17 @@ def f_q5_no_complex(x):
     # very easy to converge to 2.5 and 10, 1 is very difficult to get
     return x**3 - 13.5*x**2 + 37.5*x - 25
 
+def f_q1c_hw3(x):
+    return 1 + np.sqrt(1 - x**2) - x*(np.pi/2 + np.arccos(x))
+
 #sol_q5 = MullerMethod(np.array([0.7, 0.8, 0.9]), f_q5_no_complex)
 # had trouble getting the algorithm to recognize complex roots, kinda works
 # though so I'm going to leave it for now
 sol_q5 = MullerMethod(np.array([0.5+0.5j, 0.75+0.75j, 0.99+0.99j]), f_q5)
 print(sol_q5)
+
+sol_q1c_hw3 = MullerMethod(np.array([0.0, 0.1, 0.2]), f_q1c_hw3)
+print("Root for hw3: ", sol_q1c_hw3)
 
 print("\n\n\tPROBLEM 6\n========================")
 A = np.array([ [1, -9, 26, -24],
