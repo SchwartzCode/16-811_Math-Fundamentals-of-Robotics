@@ -4,13 +4,14 @@ from matplotlib import pyplot as plt
 x1 = np.arange(-np.pi/2, np.pi/2, 0.01)
 y1_true = 0.5 + np.sin(x1)
 y1_taylor = 0.5 + x1 - x1**3 / 6
-y1_quadratic = 0.5 + 2*x1/np.pi
-y1_LSE = 0.5 + x1*24/np.pi**3
+
+y1_quadratic = 0.5 + 0.761*x1 #part C
+y1_LSE = 0.5 + x1*24/np.pi**3   #part D
 
 plt.plot(x1, y1_true, label='Analytical')
 plt.plot(x1, y1_taylor, linestyle = '--', label='Taylor Approximation (3rd Order)')
 
-plt.plot(x1, y1_quadratic, color='purple', linestyle='--', label='Best Quadratic Approimation (it\'s linear tho)')
+plt.plot(x1, y1_quadratic, color='purple', linestyle='--', label='Best Uniform Approimation')
 plt.plot(x1, y1_LSE, color='green', linestyle='--', label='Least Squares Approximation')
 #plt.plot(x1, -np.sin(x1), label='Second Deriv')
 #plt.plot(x1, 0.5 + 4 * x1**2 / np.pi**2)
