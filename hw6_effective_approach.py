@@ -7,9 +7,8 @@ from matplotlib import pyplot as plt
 
 class blob(object):
     points = np.array([1])
-    leftDex = np.array([-1,-1])
+    lowDex = np.array([-1,-1])
     hullPts = np.array([])
-    center = np.array([0.0, 0.0])
 
     def __init__(self, x_cent, y_cent, width, point_count=20):
 
@@ -18,9 +17,9 @@ class blob(object):
             newPoint = np.array([[x_cent+width*random.random(), y_cent+width*random.random()]])
             self.points = np.vstack([self.points, newPoint])
 
-        leftDex, hullx, hully = self.getConvexPoly(self.points)
+        lowDex, hullx, hully = self.getConvexPoly(self.points)
         self.hullPts = np.transpose( np.vstack([hullx, hully]) )
-        self.genCoM()
+
 
 
 
@@ -40,7 +39,7 @@ class blob(object):
         for i in range(len(points)):
             if i != hullDexes[-1]:
                 if firstPoint:
-                    newAngle = self.getAngle([points[hullDexes[0],0], points[hullDexes[0],1] - 1], points[hullDexes[0]], points[i])
+                    newAngle = self.getAngle([points[hullDexes[0],0]+1, points[hullDexes[0],1]], points[hullDexes[0]], points[i])
                 else:
                     newAngle = self.getAngle(points[hullDexes[-2]], points[hullDexes[-1]], points[i])
 
@@ -51,25 +50,25 @@ class blob(object):
         return nextDex
 
     def getConvexPoly(self, points):
-        leftDex = 4
+        lowDex = 4
         for i in range(len(points[:,0])):
-            if i != leftDex:
+            if i != lowDex:
 
-                if points[i,0] < points[leftDex,0]:
+                if points[i,1] < points[lowDex,1]:
                     #if point is further left than current min
-                    leftDex = i
-                elif points[i,0] == points[leftDex, 0]:
-                    if points[i,1] < points[leftDex,1]:
+                    lowDex = i
+                elif points[i,1] == points[lowDex, 1]:
+                    if points[i,0] < points[lowDex,0]:
                         #if point is as left and lower than current min
-                        leftDex = i
+                        lowDex = i
 
-        currDex = leftDex
-        hullPoints = np.array([ leftDex ])
+        currDex = lowDex
+        hullPoints = np.array([ lowDex ])
 
         currDex = self.getNextHullPoint(hullPoints, points, firstPoint=True)
         hullPoints = np.append(hullPoints, [currDex])
 
-        while (currDex != leftDex):
+        while (currDex != lowDex):
             currDex = self.getNextHullPoint(hullPoints, points)
             hullPoints = np.append(hullPoints, [currDex])
 
@@ -80,18 +79,8 @@ class blob(object):
             x_vals.append(points[i,0])
             y_vals.append(points[i,1])
 
-        return leftDex, x_vals, y_vals
+        return lowDex, x_vals, y_vals
 
-    def genCoM(self):
-        xSum = 0.0
-        ySum = 0.0
-        ptCount = len(self.points)
-
-        for i in range(ptCount):
-            xSum += self.points[i,0]
-            ySum += self.points[i,1]
-
-        self.center = np.array([ (xSum/ptCount), (ySum/ptCount) ])
 
     def onSegment(self, p, q, r):
         # Taken from geeksforgeeks.com:
@@ -192,23 +181,21 @@ class blob(object):
                 end = self.hullPts[j]
 
                 if self.doIntersect(start, end, pt1, pt2):
-                    #generate new path point to avoid intersection
+                    # add intersection point to path, then add one of the endpoints
+                    # of the side of the polygon (whichever is closer to where we want to go)
                     intersection, iSlope = self.getIntersection(start, end, pt1, pt2)
-                    #print(intersection)
 
-                    poss_pt1 = np.array([ (intersection[0] + 0.7), (intersection[1] + 0.7*iSlope) ])
-                    poss_pt2 = np.array([ (intersection[0] - 0.7), (intersection[1] - 0.7*iSlope) ])
+                    dist1 = np.sqrt( (start[0] - pt2[0])**2 + (start[1] - pt2[1])**2 )
+                    dist2 = np.sqrt( (end[0] - pt2[0])**2 + (end[1] - pt2[1])**2 )
 
-                    dist1 = np.sqrt( (poss_pt1[0] - self.center[0])**2 + (poss_pt1[1] - self.center[1])**2 )
-                    dist2 = np.sqrt( (poss_pt2[0] - self.center[0])**2 + (poss_pt2[1] - self.center[1])**2 )
 
-                    print(poss_pt1, poss_pt2, "int:", intersection)
                     if dist1 > dist2:
-                        pathPts = np.vstack([ pathPts[:i], poss_pt1, pathPts[i:] ])
-                        j = 1
+                        pathPts = np.vstack([ pathPts[:i], intersection, end, pathPts[i:] ])
+                        return pathPts
                     else:
-                        pathPts = np.vstack([ pathPts[:i], poss_pt2, pathPts[i:] ])
-                        j = 1
+                        pathPts = np.vstack([ pathPts[:i], intersection, start, pathPts[i:] ])
+                        return pathPts
+
 
         return pathPts
 
@@ -240,8 +227,10 @@ while(obstructed and iter < 1e3):
     # check again to see if obstructed, set obstructed variable accoringly
 """
 
+"""
 ptsAdded = 1
-while(ptsAdded != 0):
+iter = 0
+while(ptsAdded != 0 and iter<100):
     ptsAdded = 0
     initLen = len(pathPts)
     pathPts = obj1.detectIntersection(pathPts)
@@ -249,7 +238,14 @@ while(ptsAdded != 0):
     pathPts = obj3.detectIntersection(pathPts)
     pathPts = obj4.detectIntersection(pathPts)
     ptsAdded = len(pathPts) - initLen
+    iter += 1
+"""
+pathPts = obj1.detectIntersection(pathPts)
+pathPts = obj2.detectIntersection(pathPts)
+pathPts = obj3.detectIntersection(pathPts)
+pathPts = obj4.detectIntersection(pathPts)
 
+print(len(pathPts), pathPts)
 
 plt.title("Convex Hull Demonstration")
 plt.xlabel("X [m]")
