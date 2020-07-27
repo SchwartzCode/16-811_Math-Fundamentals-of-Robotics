@@ -196,21 +196,20 @@ class blob(object):
                     intersection, iSlope = self.getIntersection(start, end, pt1, pt2)
                     #print(intersection)
 
-                    poss_pt1 = np.array([ (intersection[0] + 0.5), (intersection[1] + 0.5*iSlope) ])
-                    poss_pt2 = np.array([ (intersection[0] - 0.5), (intersection[1] - 0.5*iSlope) ])
+                    poss_pt1 = np.array([ (intersection[0] + 0.7), (intersection[1] + 0.7*iSlope) ])
+                    poss_pt2 = np.array([ (intersection[0] - 0.7), (intersection[1] - 0.7*iSlope) ])
 
                     dist1 = np.sqrt( (poss_pt1[0] - self.center[0])**2 + (poss_pt1[1] - self.center[1])**2 )
                     dist2 = np.sqrt( (poss_pt2[0] - self.center[0])**2 + (poss_pt2[1] - self.center[1])**2 )
 
+                    print(poss_pt1, poss_pt2, "int:", intersection)
                     if dist1 > dist2:
-
                         pathPts = np.vstack([ pathPts[:i], poss_pt1, pathPts[i:] ])
+                        j = 1
                     else:
-
                         pathPts = np.vstack([ pathPts[:i], poss_pt2, pathPts[i:] ])
+                        j = 1
 
-                    #i=1
-                    #j=1
         return pathPts
 
 
@@ -241,13 +240,16 @@ while(obstructed and iter < 1e3):
     # check again to see if obstructed, set obstructed variable accoringly
 """
 
-print(pathPts)
-pathPts = obj1.detectIntersection(pathPts)
-print(pathPts)
-#pathPts = obj2.detectIntersection(pathPts)
-#pathPts = obj3.detectIntersection(pathPts)
-pathPts = obj4.detectIntersection(pathPts)
-print(pathPts)
+ptsAdded = 1
+while(ptsAdded != 0):
+    ptsAdded = 0
+    initLen = len(pathPts)
+    pathPts = obj1.detectIntersection(pathPts)
+    pathPts = obj2.detectIntersection(pathPts)
+    pathPts = obj3.detectIntersection(pathPts)
+    pathPts = obj4.detectIntersection(pathPts)
+    ptsAdded = len(pathPts) - initLen
+
 
 plt.title("Convex Hull Demonstration")
 plt.xlabel("X [m]")
